@@ -1,18 +1,22 @@
-# main.py
-import json
+# test_main.py
 
+def test_display_operation_info():
+    # Пример операции
+    operation = {
+        "date": "14.10.2018",
+        "description": "Перевод организации",
+        "from": "Visa Platinum 7000 79** **** 6361",
+        "to": "Счет **9638",
+        "operationAmount": "82771.72 руб."
+    }
 
-def get_last_successful_operations(data):
-	# Отфильтруем успешные операции и отсортируем их по дате в обратном порядке
-	successful_operations = [operation for operation in data if operation.get("state") == "EXECUTED"]
-	sorted_operations = sorted(successful_operations, key=lambda x: x.get("date"), reverse=True)
-	return sorted_operations[:5]  # Вернем только последние 5 успешных операций
+    # Форматируем и выводим информацию о операции
+    formatted_output = "{} {} {} -> {}\n{}".format(
+        operation["date"],
+        operation["description"],
+        operation["from"],
+        operation["to"],
+        operation["operationAmount"]
+    )
 
-
-if __name__ == "__main__":
-	with open("operations.json", "r") as file:
-		operations_data = json.load(file)
-
-	last_successful_operations = get_last_successful_operations(operations_data)
-	for operation in last_successful_operations:
-		print(operation)
+    print(formatted_output)  # Выводим отформатированную информацию для тестирования
