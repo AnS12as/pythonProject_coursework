@@ -1,22 +1,30 @@
-# test_main.py
+import main
 
-def test_display_operation_info():
-    # Пример операции
+def test_format_output():
     operation = {
-        "date": "14.10.2018",
+        "id": 441945886,
+        "state": "EXECUTED",
+        "date": "2019-08-26T10:50:58.294041",
+        "operationAmount": {
+            "amount": "31957.58",
+            "currency": {
+                "name": "руб.",
+                "code": "RUB"
+            }
+        },
         "description": "Перевод организации",
-        "from": "Visa Platinum 7000 79** **** 6361",
-        "to": "Счет **9638",
-        "operationAmount": "82771.72 руб."
+        "from": "Maestro 1596837868705199",
+        "to": "Счет 64686473678894779589"
     }
 
-    # Форматируем и выводим информацию о операции
-    formatted_output = "{} {} {} -> {}\n{}".format(
-        operation["date"],
-        operation["description"],
-        operation["from"],
-        operation["to"],
-        operation["operationAmount"]
-    )
+    expected_output = """26.08.2019 Перевод организации
+Maestr **** **** 5199 -> **9589
+31957.58 руб."""
 
-    print(formatted_output)  # Выводим отформатированную информацию для тестирования
+    operations_data = [
+        operation
+    ]
+    last_successful_operations = main.get_last_successful_operations(operations_data)
+
+    # Теперь выполните тест
+    assert main.format_output(operation) == expected_output
