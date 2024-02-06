@@ -1,30 +1,21 @@
-import main
+import unittest
+import json
+from utils import get_last_successful_operations
 
-def test_format_output():
-    operation = {
-        "id": 441945886,
-        "state": "EXECUTED",
-        "date": "2019-08-26T10:50:58.294041",
-        "operationAmount": {
-            "amount": "31957.58",
-            "currency": {
-                "name": "руб.",
-                "code": "RUB"
-            }
-        },
-        "description": "Перевод организации",
-        "from": "Maestro 1596837868705199",
-        "to": "Счет 64686473678894779589"
-    }
 
-    expected_output = """26.08.2019 Перевод организации
-Maestr **** **** 5199 -> **9589
-31957.58 руб."""
+class TestMainFunctions(unittest.TestCase):
 
-    operations_data = [
-        operation
-    ]
-    last_successful_operations = main.get_last_successful_operations(operations_data)
+	def setUp(self):
+		with open("operations.json", "r") as file:
+			self.operations_data = json.load(file)
 
-    # Теперь выполните тест
-    assert main.format_output(operation) == expected_output
+	def test_get_last_successful_operations(self):
+		last_successful_operations = get_last_successful_operations(self.operations_data)
+		self.assertIsInstance(last_successful_operations, list)
+		self.assertLessEqual(len(last_successful_operations), 5)
+		for operation in last_successful_operations:
+			self.assertEqual(operation.get("state"), "EXECUTED")
+
+
+if __name__ == "__main__":
+	unittest.main()
